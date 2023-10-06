@@ -1,106 +1,17 @@
 # Trivago-Travels-Sql
-                                           -- Travego Travel's
--- 1.
---  Creating the schema and required tables using MySQL workbench
--- a. Create a schema named Travego and create the tables mentioned above with the mentioned
--- column names. Also, declare the relevant datatypes for each feature/column in the dataset
+                                          
+Data Analysis on Trivago Traveler’s (SQL) 
+
+Description: This project contains the record of the passengers and price to travel between two cities, Using MySQL 
+workbench created a database, tables, organizes data, querying and analyzing the data to provide insights into 
+passenger details and pricing trends for informed decision-making in the Trivago Traveler’s domain. 
+
+Approach: By analyzing all the tables using EER diagram, using Joins to join the tables, various aggregate function, 
+group by operations and returns the useful SQL queries.
+
+Key skills: Joins, aggregate function, DDL, DML.
 
 
-create database Travego;
-use Travego;
-create table if not exists passenger
-(passenger_id int primary key ,
-passenger_name char(10),
-category varchar(10),
-gender char(10),
-boarding_city varchar(20),
-destination varchar(20),
-distance int,
-bus_type varchar(20)
-);
-create table if not exists price
-(id int primary key,
-bus_type varchar(20),
-distance int,
-price int
-);
-select * from passenger;
-select * from price;
-describe passenger;
-
-
--- b. Insert the data in the newly created tables.
-
-insert into passenger values ('1', 'Sejal', 'AC ','F', 'Bengaluru', 'Chennai', '350' ,'Sleeper');
-insert into passenger values ('2', 'Anmol', 'Non-AC', 'M' ,'Mumbai' ,'Hyderabad' ,'700' ,'Sitting');
-insert into passenger values('3', 'Pallavi' ,'AC', 'F', 'Panaji', 'Bengaluru', '600' ,'Sleeper');
-insert into passenger values('4', 'Khusboo','AC', 'F' ,'Chennai',' Mumbai', '1500', 'Sleeper');
-insert into passenger values('5', 'Udit', 'Non-AC', 'M', 'Trivandrum', 'Panaji', '1000', 'Sleeper');
-insert into passenger values('6', 'Ankur', 'AC' ,'M', 'Nagpur', 'Hyderabad', '500', 'Sitting');
-insert into passenger values('7', 'Hemant', 'Non-AC' ,'M' ,'Panaji' ,'Mumbai' ,'700', 'Sleeper');
-insert into passenger values('8', 'Manish', 'Non-AC', 'M', 'Hyderabad', 'Bengaluru','500', 'Sitting');
-insert into passenger values('9', 'Piyush', 'AC', 'M' ,'Pune', 'Nagpur' ,'700' ,'Sitting');
-
-insert into price values('1', 'Sleeper', '350', '770');
-insert into price values('2','Sleeper', '500', '1100');
-insert into price values('3','Sleeper', '600', '1320');
-insert into price values('4','sleeper' ,'700', '1540');
-insert into price values('5', 'Sleeper', '1000', '2200');
-insert into price values('6', 'Sleeper', '1200', '2640');
-insert into price values('7', 'Sleeper' ,'1500', '2700');
-insert into price values('8', 'Sitting', '500' ,'620');
-insert into price values('9', 'Sitting', '600', '744');
-insert into price values('10', 'Sitting', '700' ,'868');
-insert into price values('11', 'Sitting' ,'1000', '1240');
-insert into price values('12', 'Sitting', '1200','1488');
-insert into price values('13', 'Sitting', '1500', '1860');
-
--- 2. Required Queries
--- a. How many female passengers traveled a minimum distance of 600 KMs?
-select  passenger_name, gender, distance from passenger where distance >= '600' and gender = 'f';
-
--- b. Write a query to display the passenger details whose travel distance is greater than 500 and
--- who are traveling in a sleeper bus
- select * from passenger where distance >'500' and bus_type = 'sleeper';
- 
- -- c. Select passenger names whose names start with the character 'S'.
- select passenger_name from passenger where passenger_name like 'S%';
- 
--- d. Calculate the total price charged which is greater than 2000, displaying the  Boarding City,
--- Destination City, Bus type, and Price in the output.
-select pa.Boarding_City, pa.destination, pa.Bus_type, sum(pr.price) as total_price
-from passenger pa left join price pr on pa.passenger_id=pr.id group by pa.Boarding_City, pa.destination, pa.Bus_type having total_price >2000 ;
-
--- e. What are the passenger name and the ticket price for those who traveled 1000 KMs Sitting in
--- a bus? 
-select  pa.passenger_name, pa.distance,pa.bus_type,pr.price
-from passenger as pa left join price as pr on pa.passenger_id = pr.id where pa.distance > 1000  and  pa.bus_type = 'sleeper';
-
--- f. What will be the Sitting and Sleeper bus charge for Pallavi to travel from Bangalore to Panaji? 
-select pa.passenger_name, pa.bus_type,pa.boarding_city,pa.destination,pr.price
-from  passenger pa left join price pr on pa.distance=pr.distance
-where pa.passenger_name = 'pallavi';
-
--- g. Alter the column category with the value "Non-AC" where the Bus_Type is sleeper
- update passenger set category= 'non_ac' where bus_type = 'sleeper';
-
--- h. find the count of gender who is traveling in Ac and Non-Ac where the bus_type is Sleeper
- select gender,bus_type, count(category) as count_category from passenger  where bus_type = 'sleeper' group by gender, bus_type;
- 
--- i. Delete an entry from the table where the passenger name is Piyush and commit this change in
--- the database. 
- set autocommit = 0;
- delete from passenger where passenger_name = 'piyush';
- commit;
-
--- j. Truncate the table passenger and comment on the number of rows in the table (explain if
--- required). 
-truncate passenger;
--- no rows will remain.
-
--- k. Delete the table passenger from the database. 
-drop table passenger;
-drop table price;
 
 
  
